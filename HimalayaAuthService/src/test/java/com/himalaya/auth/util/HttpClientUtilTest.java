@@ -44,7 +44,7 @@ public class HttpClientUtilTest {
 	public void testSignPost(){
 		
 		String method = "POST";
-        String appKey = "guest";
+        String appKey = "GUEST";
         String appSecret = "123456";
         String version = "1.0";
         String timestamp = String.valueOf(System.currentTimeMillis());
@@ -55,7 +55,7 @@ public class HttpClientUtilTest {
         headerParams.put(SdkConstant.CLOUDAPI_X_CA_TIMESTAMP, timestamp);
 
         String url = "http://127.0.0.1:8080/auth/post";
-        
+
 //        Map<String, String> queryParams = new HashMap<>();
 //        queryParams.put("flag", "10100101");
 //        Map<String, String> formParams = null;
@@ -89,14 +89,14 @@ public class HttpClientUtilTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("[Thirdpart Order][result] " + e);
-		} 
+		}
 	}
 	
 	@Test
 	public void testSignGet(){
 		
 		String method = "GET";
-        String appKey = "guest";
+        String appKey = "GUEST";
         String appSecret = "123456";
         String version = "1.0";
         String timestamp = String.valueOf(System.currentTimeMillis());

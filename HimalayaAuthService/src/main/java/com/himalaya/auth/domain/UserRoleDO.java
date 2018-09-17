@@ -1,6 +1,11 @@
 package com.himalaya.auth.domain;
 
-public class UserRoleDO {
+import java.io.Serializable;
+
+public class UserRoleDO implements Serializable {
+
+    private static final long serialVersionUID = 4840400111629178659L;
+
     private Long id;
 
     private Long userId;

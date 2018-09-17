@@ -6,6 +6,10 @@
     <result column="ROLE_ID" jdbcType="BIGINT" property="roleId" />
     <result column="PERMISSION_ID" jdbcType="BIGINT" property="permissionId" />
   </resultMap>
+  <resultMap id="RoleURLResultMap" type="com.himalaya.auth.domain.RolePermissionDO">
+    <result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
+    <result column="PERMISSION_URL" jdbcType="VARCHAR" property="permissionURL" />
+  </resultMap>
   <sql id="Base_Column_List">
     ID, ROLE_ID, PERMISSION_ID
   </sql>

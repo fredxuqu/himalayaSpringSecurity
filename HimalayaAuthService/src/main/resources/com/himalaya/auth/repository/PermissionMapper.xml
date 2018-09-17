@@ -103,4 +103,10 @@
       DESCRIPTION = #{description,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="getAllPermission" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_cs_permission
+  </select>
 </mapper>

@@ -1,7 +1,8 @@
 package com.himalaya.auth.config;
 
-import com.himalaya.auth.filter.CustomAuthFilter;
-import com.himalaya.auth.service.AuthUserDetailServiceImpl;
+import com.himalaya.auth.filter.SDKAuthenticationFilter;
+import com.himalaya.auth.filter.SDKFilterSecurityInterceptor;
+import com.himalaya.auth.service.impl.AuthUserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -23,16 +25,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	CustomAuthFilter customAuthFilter;
+	SDKAuthenticationFilter sdkAuthenticationFilter;
+
+	@Autowired
+	SDKFilterSecurityInterceptor sdkFilterSecurityInterceptor;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-    	http.addFilterBefore(customAuthFilter, UsernamePasswordAuthenticationFilter.class)
-			.authorizeRequests()
+    	http.authorizeRequests()
             .antMatchers("/").permitAll()
             .antMatchers("/admin").hasRole("ADMIN")
             .antMatchers("/index").hasRole("SEARCH")
-//            .antMatchers("/index").hasRole("USER")
             .antMatchers("/user").hasRole("ADMIN")
 			.antMatchers("/get").hasRole("SEARCH")
 			.antMatchers("/post").hasRole("SEARCH")
@@ -41,6 +44,8 @@ public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
             .logout().permitAll()
             .and()
             .formLogin();
+    	http.addFilterBefore(sdkAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(sdkFilterSecurityInterceptor, FilterSecurityInterceptor.class);
         http.csrf().disable();
     }
 

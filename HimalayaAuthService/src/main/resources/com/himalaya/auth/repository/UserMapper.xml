@@ -140,11 +140,10 @@
     where ID = #{id,jdbcType=BIGINT}
   </update>
 
-  <select id="selectUserByAppId" parameterType="java.lang.String" resultMap="BaseResultMap">
-
+  <select id="getUserByAppKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
       <include refid="Base_Column_List"/>
       from tb_cs_user
-     where APP_ID = #{appId}
+     where APP_KEY = #{appKey}
   </select>
 </mapper>

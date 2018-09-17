@@ -9,6 +9,7 @@
     <result column="MODIFY_TIME" jdbcType="TIMESTAMP" property="modifyTime" />
     <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
   </resultMap>
+
   <sql id="Base_Column_List">
     ID, ROLE_NAME, STATUS, CREATE_TIME, MODIFY_TIME, DESCRIPTION
   </sql>
@@ -111,13 +112,20 @@
     where ID = #{id,jdbcType=BIGINT}
   </select>
   
-  <select id="listRoleByAppId" parameterType="java.lang.String" resultMap="BaseResultMap">
-  	SELECT 
-  		R.ID, R.ROLE_NAME, R.STATUS, R.CREATE_TIME, R.MODIFY_TIME, R.DESCRIPTION
+  <select id="listRoleNameByAppKey" parameterType="java.lang.String" resultType="String">
+  	SELECT
+  		R.ROLE_NAME
   	  FROM TB_CS_USER U, TB_CS_ROLE R, TB_CS_USER_ROLE UR
 	 WHERE U.ID = UR.USER_ID
 	   AND R.ID = UR.ROLE_ID
-	   AND U.APP_ID = #{appId}
+	   AND U.APP_KEY = #{appKey}
+  </select>
+
+  <select id="listRoleNameByPermissionId" parameterType="java.lang.Long" resultType="String">
+    SELECT R.ROLE_NAME AS PERMISSION_URL FROM TB_CS_ROLE R, TB_CS_ROLE_PERMISSION RP, TB_CS_PERMISSION P
+    WHERE R.ID = RP.ROLE_ID
+    AND P.ID = RP.PERMISSION_ID
+    AND P.ID = #{permissionId}
   </select>
 
 </mapper>

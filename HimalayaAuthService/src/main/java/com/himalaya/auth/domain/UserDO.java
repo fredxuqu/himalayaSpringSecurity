@@ -1,8 +1,12 @@
 package com.himalaya.auth.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class UserDO {
+public class UserDO implements Serializable{
+
+    private static final long serialVersionUID = 2301959296308549479L;
+
     private Long id;
 
     private String appId;

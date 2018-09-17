@@ -1,8 +1,12 @@
 package com.himalaya.auth.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class RoleDO {
+public class RoleDO implements Serializable {
+
+    private static final long serialVersionUID = 3263748926933423315L;
+
     private Long id;
 
     private String roleName;

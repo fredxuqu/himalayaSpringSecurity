@@ -1,10 +1,9 @@
 package com.himalaya.auth.repository;
 
-import java.util.List;
-
+import com.himalaya.auth.domain.RoleDO;
 import org.apache.ibatis.annotations.Param;
 
-import com.himalaya.auth.domain.RoleDO;
+import java.util.List;
 
 public interface RoleMapper {
 	
@@ -19,8 +18,9 @@ public interface RoleMapper {
     int updateByPrimaryKeySelective(RoleDO record);
 
     int updateByPrimaryKey(RoleDO record);
-    
-    List<RoleDO> listRoleByAppId(@Param(value="appId")String appId);
-    
-    
+
+    // added by fred
+    List<String> listRoleNameByAppKey(@Param(value="appKey")String appKey);
+
+    List<String> listRoleNameByPermissionId(@Param(value="permissionId")Long permissionId);
 }

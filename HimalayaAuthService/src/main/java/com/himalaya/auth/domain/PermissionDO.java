@@ -1,8 +1,12 @@
 package com.himalaya.auth.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class PermissionDO {
+public class PermissionDO implements Serializable {
+
+    private static final long serialVersionUID = -142528068461246448L;
+
     private Long id;
 
     private String url;

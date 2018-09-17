@@ -16,5 +16,5 @@ public interface UserMapper {
 
     int updateByPrimaryKey(UserDO record);
     
-    UserDO selectUserByAppId(@Param("appId") String appId);
+    UserDO getUserByAppKey(@Param("appKey") String appKey);
 }

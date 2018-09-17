@@ -2,6 +2,8 @@ package com.himalaya.auth.repository;
 
 import com.himalaya.auth.domain.PermissionDO;
 
+import java.util.List;
+
 public interface PermissionMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -14,4 +16,7 @@ public interface PermissionMapper {
     int updateByPrimaryKeySelective(PermissionDO record);
 
     int updateByPrimaryKey(PermissionDO record);
+
+    // Added by fred
+    List<PermissionDO> getAllPermission();
 }

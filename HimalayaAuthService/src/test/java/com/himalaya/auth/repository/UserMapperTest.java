@@ -27,12 +27,12 @@ public class UserMapperTest {
 	@Test
 	public void testSelectByPrimaryKey(){
 		UserDO userDO = userMapper.selectByPrimaryKey(1003l);
-		Assert.assertEquals("GUEST", userDO.getAppId());
+		Assert.assertEquals("GUEST", userDO.getAppKey());
 	}
 
 	@Test
 	public void testSelectUserByAppId(){
-		UserDO userDO = userMapper.selectUserByAppId("GUEST");
-		Assert.assertEquals("GUEST", userDO.getAppId());
+		UserDO userDO = userMapper.getUserByAppKey("GUEST");
+		Assert.assertEquals("GUEST", userDO.getAppKey());
 	}
 }
