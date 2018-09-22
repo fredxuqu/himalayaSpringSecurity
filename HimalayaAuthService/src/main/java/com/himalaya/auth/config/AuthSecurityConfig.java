@@ -1,8 +1,5 @@
 package com.himalaya.auth.config;
 
-import com.himalaya.auth.filter.SDKAuthenticationFilter;
-import com.himalaya.auth.filter.SDKFilterSecurityInterceptor;
-import com.himalaya.auth.service.impl.AuthUserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +9,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.himalaya.auth.filter.LoggingFilter;
+import com.himalaya.auth.filter.SDKAuthenticationFilter;
+import com.himalaya.auth.filter.SDKFilterSecurityInterceptor;
+import com.himalaya.auth.service.impl.AuthUserDetailServiceImpl;
 
 /**
 * @author: xuqu
@@ -29,23 +31,28 @@ public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	SDKFilterSecurityInterceptor sdkFilterSecurityInterceptor;
+	
+	@Autowired
+	LoggingFilter loggingFiltr;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
     	http.authorizeRequests()
             .antMatchers("/").permitAll()
-            .antMatchers("/admin").hasRole("ADMIN")
-            .antMatchers("/index").hasRole("SEARCH")
-            .antMatchers("/user").hasRole("ADMIN")
-			.antMatchers("/get").hasRole("SEARCH")
-			.antMatchers("/post").hasRole("SEARCH")
+//            .antMatchers("/admin").hasRole("ADMIN")
+//            .antMatchers("/index").hasRole("SEARCH")
+//            .antMatchers("/user").hasRole("ADMIN")
+//			.antMatchers("/get").hasRole("SEARCH")
+//			.antMatchers("/post").hasRole("SEARCH")
             .anyRequest().authenticated()
             .and()
             .logout().permitAll()
             .and()
             .formLogin();
     	http.addFilterBefore(sdkAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-			.addFilterBefore(sdkFilterSecurityInterceptor, FilterSecurityInterceptor.class);
+			.addFilterBefore(sdkFilterSecurityInterceptor, FilterSecurityInterceptor.class)
+			.addFilterAfter(loggingFiltr, FilterSecurityInterceptor.class)
+			;
         http.csrf().disable();
     }
 

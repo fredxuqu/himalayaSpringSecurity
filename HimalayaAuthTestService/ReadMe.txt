@@ -68,10 +68,10 @@ How to integrate spring boot with spring security
 		}
 	}
 	
-	3.	Run App
-		@SpringBootApplication
+	3.	Run App		
 		@EnableAutoConfiguration
 		@EnableGlobalMethodSecurity(prePostEnabled=true)
+		@SpringBootApplication(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
 		public class HimalayaAuthServiceApplication {
 		
 			public static void main(String[] args) {
@@ -201,7 +201,8 @@ Integrating Springboot with Mybatis, using Mybatis Auto Generator to generate th
 	</plugin>
 	
 	
-Logg
+	
+	
 	
 	
 	

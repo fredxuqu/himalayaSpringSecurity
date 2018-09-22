@@ -1,12 +1,15 @@
 package com.himalaya.auth.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.himalaya.auth.config.RedisConfig;
-import com.himalaya.auth.constant.SdkConstant;
-import com.himalaya.auth.constants.SysConstant;
-import com.himalaya.auth.domain.PermissionDO;
-import com.himalaya.auth.repository.PermissionMapper;
-import com.himalaya.auth.repository.RoleMapper;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +21,12 @@ import org.springframework.security.web.access.intercept.FilterInvocationSecurit
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import com.alibaba.fastjson.JSON;
+import com.himalaya.auth.config.RedisConfig;
+import com.himalaya.auth.constants.SysConstant;
+import com.himalaya.auth.domain.PermissionDO;
+import com.himalaya.auth.repository.PermissionMapper;
+import com.himalaya.auth.repository.RoleMapper;
 
 /**
  * Created by xuqu on 2018/9/13.
@@ -44,11 +50,11 @@ public class SDKSecurityMetadataSourceService implements FilterInvocationSecurit
 	
 	@Override
 	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-		FilterInvocation fi = (FilterInvocation) object;
-	    String url = fi.getRequestUrl();
-
-	    String appKey = String.class.cast(
-	            HttpServletRequest.class.cast(fi.getHttpRequest()).getHeader(SdkConstant.CLOUDAPI_X_CA_KEY));
+//		FilterInvocation fi = (FilterInvocation) object;
+//	    String url = fi.getRequestUrl();
+//
+//	    String appKey = String.class.cast(
+//	            HttpServletRequest.class.cast(fi.getHttpRequest()).getHeader(SdkConstant.CLOUDAPI_X_CA_KEY));
 
 	    // get url role map by app key
 	    Map<String, Collection<ConfigAttribute>> rolePermissionMap = loadRolePermissionMap();

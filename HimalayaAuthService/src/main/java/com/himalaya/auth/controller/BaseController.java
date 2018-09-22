@@ -42,7 +42,12 @@ public class BaseController {
 		return "Auth User and Admin " + flag;
 	}
 
-	@RequestMapping(value = "/post", method = { RequestMethod.POST })
+	@RequestMapping(value = "/post", 
+					method = { RequestMethod.POST }, 
+					//params={"",""}
+					//headers={"",""}
+					consumes={"application/octet-stream; charset=UTF-8","application/json; charset=UTF-8"},
+					produces={"application/octet-stream; charset=UTF-8","application/json; charset=UTF-8"})
 	public String post(@RequestBody User user){
 		LOGGER.debug("Auth User and Admin " + user.getFlag());
 		return "Auth User and Admin " + user.getFlag();

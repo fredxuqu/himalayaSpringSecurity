@@ -22,6 +22,14 @@ import java.util.Map;
 public class HttpClientUtilTest {
         
 	@Test
+	public void testGetIndex() {
+		// corp getlist
+		String url = "http://127.0.0.1:8080/auth";
+		String response = HttpClientPostJSON.sendGet(url);
+		System.out.println(response);
+	}
+	
+	@Test
 	public void testGet() {
 		// corp getlist
 		String url = "http://127.0.0.1:8080/auth/index?flag=10100101";

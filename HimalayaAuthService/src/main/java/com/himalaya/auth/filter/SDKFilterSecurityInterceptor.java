@@ -1,8 +1,14 @@
 package com.himalaya.auth.filter;
 
-import com.himalaya.auth.service.impl.SDKSecurityMetadataSourceService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
@@ -10,8 +16,7 @@ import org.springframework.security.access.intercept.InterceptorStatusToken;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.*;
-import java.io.IOException;
+import com.himalaya.auth.service.impl.SDKSecurityMetadataSourceService;
 
 
 /**
@@ -28,7 +33,7 @@ public class SDKFilterSecurityInterceptor extends AbstractSecurityInterceptor im
         super.setAccessDecisionManager(sdkAccessDecisionManager);
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(SDKFilterSecurityInterceptor.class);
+//    private static final Logger LOGGRE = LoggerFactory.getLogger(SDKFilterSecurityInterceptor.class);
 
     @Override
     public Class<?> getSecureObjectClass() {

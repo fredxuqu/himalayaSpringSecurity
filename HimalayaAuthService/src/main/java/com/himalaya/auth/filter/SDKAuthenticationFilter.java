@@ -1,7 +1,11 @@
 package com.himalaya.auth.filter;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -23,9 +27,11 @@ import org.springframework.util.Assert;
 import org.springframework.web.filter.GenericFilterBean;
 
 import com.alibaba.druid.util.StringUtils;
+import com.alibaba.fastjson.JSONObject;
 import com.himalaya.auth.constant.SdkConstant;
 import com.himalaya.auth.dto.AuthDTO;
 import com.himalaya.auth.service.AuthenticationService;
+import com.himalaya.auth.util.IOUtils;
 import com.himalaya.auth.util.SignUtil;
 
 /**
@@ -48,13 +54,16 @@ public class SDKAuthenticationFilter extends GenericFilterBean {
         LOGGER.debug("CustomAuthFilter called!");
 
         // get http request
-        HttpServletRequest httpRequest = (HttpServletRequest)request;
-
+        HttpServletRequest httpServletRequest = (HttpServletRequest)request;
+        ServletRequest servletRequestWrapper = new BodyHttpServletRequestWrapper(httpServletRequest);
+        getParameterMap(httpServletRequest);
+        getAttributeMap(httpServletRequest);
+        
         // get header parameters
         String appKey = String.class.cast(
-                HttpServletRequest.class.cast(httpRequest).getHeader(SdkConstant.CLOUDAPI_X_CA_KEY));
+                HttpServletRequest.class.cast(httpServletRequest).getHeader(SdkConstant.CLOUDAPI_X_CA_KEY));
         String sign = String.class.cast(
-                HttpServletRequest.class.cast(httpRequest).getHeader(SdkConstant.CLOUDAPI_X_CA_SIGNATURE));
+                HttpServletRequest.class.cast(httpServletRequest).getHeader(SdkConstant.CLOUDAPI_X_CA_SIGNATURE));
 
         Assert.hasText(appKey, SdkConstant.CLOUDAPI_X_CA_KEY + " header must not be empty or null");
         Assert.hasText(sign, SdkConstant.CLOUDAPI_X_CA_SIGNATURE + " header must not be empty or null");
@@ -65,9 +74,9 @@ public class SDKAuthenticationFilter extends GenericFilterBean {
         if (userDTO != null) {
             // get header parameters
             String version = String.class.cast(
-                    HttpServletRequest.class.cast(httpRequest).getHeader(SdkConstant.CLOUDAPI_X_CA_VERSION));
+                    HttpServletRequest.class.cast(httpServletRequest).getHeader(SdkConstant.CLOUDAPI_X_CA_VERSION));
             String timestamp = String.class.cast(
-                    HttpServletRequest.class.cast(httpRequest).getHeader(SdkConstant.CLOUDAPI_X_CA_TIMESTAMP));
+                    HttpServletRequest.class.cast(httpServletRequest).getHeader(SdkConstant.CLOUDAPI_X_CA_TIMESTAMP));
 
             Map<String, String> headerParams = new HashMap<>();
             if (!StringUtils.isEmpty(appKey)) {
@@ -82,10 +91,10 @@ public class SDKAuthenticationFilter extends GenericFilterBean {
             LOGGER.debug("Params of Header : " + headerParams);
 
             // get method (POST/GET)
-            String requestMethod = httpRequest.getMethod();
+            String requestMethod = httpServletRequest.getMethod();
 
             // get url without parameters
-            String queryURL = httpRequest.getRequestURL().toString();
+            String queryURL = httpServletRequest.getRequestURL().toString();
 
             // get all query parameters and value
             // Map<String, String> queryParams = getParameterMap(httpRequest);
@@ -109,10 +118,9 @@ public class SDKAuthenticationFilter extends GenericFilterBean {
         } else {
             LOGGER.info("AppKey [{}] is not exists in system!", appKey);
         }
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(servletRequestWrapper, response);
     }
 
-    /**
     private Map<String, String> getParameterMap(HttpServletRequest httpRequest){
         Map<String, String> queryParams = new HashMap<>();
         Enumeration<String> parameterNames = httpRequest.getParameterNames();
@@ -156,5 +164,5 @@ public class SDKAuthenticationFilter extends GenericFilterBean {
             LOGGER.error("Get request body failed " + e.getMessage());
         }
         return paramMap;
-    }*/
+    }
 }
