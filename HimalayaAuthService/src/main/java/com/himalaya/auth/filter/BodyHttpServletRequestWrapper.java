@@ -35,12 +35,20 @@ public class BodyHttpServletRequestWrapper extends HttpServletRequestWrapper {
 		requestBody = requestStream.getBytes(Charset.forName("UTF-8"));
 	}
 	
+	public String getRequestBody(){
+		if(requestBody!=null && requestBody.length>0){
+			return new String(requestBody, Charset.forName("UTF-8"));
+		} else {
+			return null;
+		}
+	}
+	
 	/**
 	 * get request stream
 	 * @param request
 	 * @return
 	 */
-	public String getRequestBody(final HttpServletRequest request){
+	private String getRequestBody(final HttpServletRequest request){
 		StringBuilder stringBuilder = new StringBuilder();
 		InputStream inputStream = null;
 		BufferedReader bufferedReader = null;

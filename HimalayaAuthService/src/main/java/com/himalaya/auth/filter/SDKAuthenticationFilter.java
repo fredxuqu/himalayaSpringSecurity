@@ -55,9 +55,16 @@ public class SDKAuthenticationFilter extends GenericFilterBean {
 
         // get http request
         HttpServletRequest httpServletRequest = (HttpServletRequest)request;
-        ServletRequest servletRequestWrapper = new BodyHttpServletRequestWrapper(httpServletRequest);
+        BodyHttpServletRequestWrapper servletRequestWrapper = new BodyHttpServletRequestWrapper(httpServletRequest);
+        
+        // get Parameters 
         getParameterMap(httpServletRequest);
+        
+        // get Attributes
         getAttributeMap(httpServletRequest);
+        
+        // if we want to get request parameters from request body , should use servletRequestWrapper.getRequestBody()
+        getRequestBodyMap(servletRequestWrapper.getRequestBody());
         
         // get header parameters
         String appKey = String.class.cast(
@@ -130,8 +137,51 @@ public class SDKAuthenticationFilter extends GenericFilterBean {
         }
         return queryParams;
     }
+    
+    private Map<String, String> getAttributeMap(HttpServletRequest httpRequest){
+        Map<String, String> queryParams = new HashMap<>();
+        Enumeration<String> parameterNames = httpRequest.getAttributeNames();
+        while(parameterNames.hasMoreElements()){
+            String paramKey = parameterNames.nextElement();
+            queryParams.put(paramKey, String.valueOf(httpRequest.getAttribute(paramKey)));
+        }
+        return queryParams;
+    }
+    
+    private Map<String, String> getRequestBodyMap(String requestBody) {
+        Map<String, String> paramMap = null;
+        try {
+            if(StringUtils.isEmpty(requestBody)){
+                return null;
+            }
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Request Body : " + requestBody);
+            }
+            JSONObject jsonObject = JSONObject.parseObject(requestBody);
 
-    private Map<String, String> getAttributeMap(HttpServletRequest httpRequest) {
+            // Convert JSON Object to Map
+            Map<String,Object> jsonMap = (Map<String,Object>)jsonObject;
+            if(jsonMap.isEmpty()){
+                return null;
+            }
+
+            // Convert Object value to String value.
+            paramMap = new HashMap<>();
+            Iterator<String> iterator = jsonMap.keySet().iterator();
+            while(iterator.hasNext()){
+                String key = iterator.next();
+                paramMap.put(key, String.valueOf(jsonMap.get(key)));
+            }
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Request Body Map : " + paramMap);
+            }
+        } catch(Exception e){
+            LOGGER.error("Get request body failed " + e.getMessage());
+        }
+        return paramMap;
+    }
+    
+    private Map<String, String> getRequestBodyMap(HttpServletRequest httpRequest) {
         Map<String, String> paramMap = null;
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(httpRequest.getInputStream()));
